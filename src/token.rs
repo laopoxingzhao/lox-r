@@ -1,3 +1,7 @@
+use std::{fmt::Display, u32};
+
+
+#[derive(Debug,PartialEq, Eq,Clone, Copy)]
 pub enum TokenType {
   // Single-character tokens.
   LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
@@ -19,19 +23,38 @@ pub enum TokenType {
   EOF
 }
 
-
+#[derive(Debug)]
 pub struct Token {
   pub token_type: TokenType,
   pub lexeme: String,
-  pub literal: String,
+  pub literal: Option<Literal>,
   pub line: u32,
 }
 
 impl Token {
-  pub fn new(token_type: TokenType, lexeme: String, literal: String, line: u32) -> Self {
+  pub fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: u32) -> Self {
     Self { token_type, lexeme, literal, line }
   }
   pub fn to_string(&self) -> String {
-    format!("{:?} {} {}", self.token_type, self.lexeme, self.literal)
+    format!("{:?} {} {:#?}", self.token_type, self.lexeme, self.literal)
   }
+
+}
+#[derive(Debug,Clone)]
+pub enum Literal {
+    String(String),
+    Number(f64),
+    Bool(bool),
+    Nil,
+}
+
+impl Display for Literal{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Literal::String(s) => write!(f, "{}", s),
+            Literal::Number(n) => write!(f, "{}", n),
+            Literal::Bool(b) => write!(f, "{}", b),
+            Literal::Nil => write!(f, "nil"),
+        }
+    }
 }

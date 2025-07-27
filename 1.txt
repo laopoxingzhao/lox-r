@@ -1,0 +1,12 @@
+// this is a comment
+(( )){}] // grouping stuff
+!*+-/=<> <= == // operators(){}//ddd
+*
+ddd   */
+var a = 1;
+"ddddd
+dddd    wwdd"*
+dddd    wwdd"*
+rhddd    wwdd"*
+drdd    wwdd"*
+[]
