@@ -36,7 +36,7 @@ fn get_keywords() -> &'static HashMap<&'static str, TokenType> {
 }
 pub struct Scanner {
     source: String,
-    tokens: Rc<RefCell<Vec<Token>>>,
+    tokens: Vec<Token>,
     start: u32,
     current: u32,
     line: u32,
@@ -48,23 +48,23 @@ impl Scanner {
         get_keywords();
         Self {
             source,
-            tokens: Rc::new(RefCell::new(Vec::new())),
+            tokens: Vec::new(),
             start: 0,
             current: 0,
             line: 1,
         }
     }
 
-    pub fn scan_tokens(&mut self) -> Rc<RefCell<Vec<Token>>> {
+    pub fn scan_tokens(&mut self) -> Vec<Token> {
         while !self.is_at_end() {
             self.start = self.current;
             self.scan_token();
         }
 
-        self.tokens
-            .borrow_mut()
-            .push(Token::new(TokenType::EOF, "".to_string(), None, self.line));
-        Rc::clone(&self.tokens)
+        self.tokens.push(Token::new(TokenType::EOF, "".to_string(), None, self.line));
+        // 返回扫描到的所有token
+        return self.tokens.clone();
+        
     }
 
     fn scan_token(&mut self) {
@@ -188,7 +188,6 @@ impl Scanner {
         let text = &self.source[self.start as usize..self.current as usize];
         // self.source.substring(self.start as usize, self.current as usize);
         self.tokens
-            .borrow_mut()
             .push(Token::new(token_type, text.to_string(), literal, self.line));
     }
     fn add_token_no_literal(&mut self, token_type: TokenType) {

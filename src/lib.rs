@@ -3,8 +3,9 @@ use std::{fs::File, io::{Read, Write}, path::Path, sync::atomic::AtomicBool};
 use crate::scanner::Scanner;
 
 mod scanner;
+mod expr;
 mod token;
-
+mod generate_ast;
 
 
 
@@ -67,7 +68,7 @@ fn run(code: String) {
     let mut scanner = Scanner::new(code);
     let tokens = scanner.scan_tokens();
 
-    for token in tokens.borrow().iter() {
+    for token in tokens.iter() {
         println!("{:?}", token);
     }
 }
