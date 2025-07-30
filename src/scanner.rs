@@ -2,7 +2,7 @@ use std::{cell::RefCell, collections::HashMap, iter::Map, rc::Rc, sync::OnceLock
 
 use crate::{
     err,
-    token::{Literal, Token, TokenType},
+    token::{LiteralType, Token, TokenType},
 };
 
 pub static KEYWORDS: OnceLock<HashMap<&'static str, TokenType>> = OnceLock::new();
@@ -184,7 +184,7 @@ impl Scanner {
         false
     }
 
-    fn add_token(&mut self, token_type: TokenType, literal: Option<Literal>) {
+    fn add_token(&mut self, token_type: TokenType, literal: Option<LiteralType>) {
         let text = &self.source[self.start as usize..self.current as usize];
         // self.source.substring(self.start as usize, self.current as usize);
         self.tokens
@@ -210,7 +210,7 @@ impl Scanner {
 
         self.add_token(
             TokenType::STRING,
-            Some(Literal::String(
+            Some(LiteralType::String(
                 self.source[self.start as usize + 1..self.current as usize - 1].to_string(),
             )),
         );
@@ -233,7 +233,7 @@ impl Scanner {
         }
         self.add_token(
             TokenType::NUMBER,
-            Some(Literal::Number(
+            Some(LiteralType::Number(
                 self.source[self.start as usize..self.current as usize]
                     .parse()
                     .unwrap_or(0.0),

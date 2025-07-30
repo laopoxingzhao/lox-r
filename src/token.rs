@@ -56,11 +56,11 @@ pub struct Token {
      lexeme: String,
      line: u32,
      token_type: TokenType,
-     literal: Option<Literal>,
+     literal: Option<LiteralType>,
 }
 
 impl Token {
-    pub fn new(token_type: TokenType, lexeme: String, literal: Option<Literal>, line: u32) -> Self {
+    pub fn new(token_type: TokenType, lexeme: String, literal: Option<LiteralType>, line: u32) -> Self {
         Self {
             token_type,
             lexeme,
@@ -73,20 +73,20 @@ impl Token {
     }
 }
 #[derive(Debug, Clone)]
-pub enum Literal {
+pub enum LiteralType {
     String(String),
     Number(f64),
     Bool(bool),
     Nil,
 }
 
-impl Display for Literal {
+impl Display for LiteralType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Literal::String(s) => write!(f, "{}", s),
-            Literal::Number(n) => write!(f, "{}", n),
-            Literal::Bool(b) => write!(f, "{}", b),
-            Literal::Nil => write!(f, "nil"),
+            LiteralType::String(s) => write!(f, "{}", s),
+            LiteralType::Number(n) => write!(f, "{}", n),
+            LiteralType::Bool(b) => write!(f, "{}", b),
+            LiteralType::Nil => write!(f, "nil"),
         }
     }
 }
