@@ -6,7 +6,7 @@ mod scanner;
 mod expr;
 mod token;
 mod generate_ast;
-
+mod parser;
 
 
 pub static HAD_ERROR: AtomicBool = AtomicBool::new(false);

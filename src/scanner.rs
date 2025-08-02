@@ -36,7 +36,7 @@ fn get_keywords() -> &'static HashMap<&'static str, TokenType> {
 }
 pub struct Scanner {
     source: String,
-    tokens: Vec<Token>,
+    pub tokens: Vec<Token>,
     start: u32,
     current: u32,
     line: u32,
@@ -61,10 +61,10 @@ impl Scanner {
             self.scan_token();
         }
 
-        self.tokens.push(Token::new(TokenType::EOF, "".to_string(), None, self.line));
+        self.tokens
+            .push(Token::new(TokenType::EOF, "".to_string(), None, self.line));
         // 返回扫描到的所有token
         return self.tokens.clone();
-        
     }
 
     fn scan_token(&mut self) {
