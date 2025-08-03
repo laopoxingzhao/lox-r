@@ -56,7 +56,7 @@ pub struct Token {
      lexeme: String,
      line: u32,
      pub(crate) token_type: TokenType,
-     literal: Option<LiteralType>,
+     pub(crate) literal: Option<LiteralType>,
 }
 
 impl Token {
