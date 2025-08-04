@@ -1,8 +1,9 @@
+use crate::err;
 use crate::expr::{Binary, Expr, Unary};
 use crate::scanner::Scanner;
 use crate::token::{LiteralType, Token, TokenType};
 
-struct Parse {
+pub(crate) struct Parse {
     // scanner: Scanner,
     tokens: Vec<Token>,
     current: usize,
@@ -14,6 +15,10 @@ impl Parse {
             tokens: scanner.tokens,
             current: 0,
         }
+    }
+    pub fn parse(&mut self) -> Expr { 
+    
+        self.expression()
     }
     fn expression(&mut self) -> Expr {
         self.equality()
@@ -72,7 +77,7 @@ impl Parse {
     }
 
     fn comparison(&mut self) -> Expr {
-        let expr: Expr = self.term();
+        let mut expr: Expr = self.term();
 
         while self.match_token(&[
             TokenType::GREATER,
@@ -190,6 +195,40 @@ impl Parse {
             });
         }
     //   return Expr::Literal(crate::expr::Literal { value: LiteralType::Nil });
-    todo!("Primary expression parsing not implemented yet");
+    // todo!("Primary expression parsing not implemented yet");
+        err(self.peek().line, "Expected expression");
+        return Expr::Literal(crate::expr::Literal {
+            value: LiteralType::Nil,
+        });
+    }
+    
+    fn consume(&mut self, token: Token, error_message: &str) -> Token {
+        if self.check(token.token_type) {
+            return self.advance();
+        }
+        err(token.line, error_message);
+        panic!("{}", error_message);
+
+    }
+
+    fn synchronize(&mut self) {
+        self.advance();
+        while !self.is_at_end() {
+            if self.previous().token_type == TokenType::SEMICOLON {
+                return;
+            }
+            match self.peek().token_type {
+                TokenType::CLASS
+                | TokenType::FUN
+                | TokenType::VAR
+                | TokenType::FOR
+                | TokenType::IF
+                | TokenType::WHILE
+                | TokenType::PRINT
+                | TokenType::RETURN => return,
+                _ => {}
+            }
+            self.advance();
+        }
     }
 }

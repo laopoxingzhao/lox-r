@@ -68,13 +68,19 @@ fn run(code: String) {
     let mut scanner = Scanner::new(code);
     let tokens = scanner.scan_tokens();
 
-    for token in tokens.iter() {
-        println!("{:?}", token);
-    }
+    let mut parser = parser::Parse::new(scanner);
+    let expr = parser.parse();
+
+    println!("Parsed expression: {:?}", expr);
+
+    // for token in tokens.iter() {
+    //     println!("{:?}", token);
+    // }
 }
 
 pub fn err(line: u32, msg: &str) {
     // eprintln!("Error: {}", msg);
+    // if /
     report(line, "", msg);
 }
 
@@ -85,4 +91,17 @@ fn report(line: u32, wher: &str, msg: &str) {
     // 最严格的内存顺序，保证所有线程观察到的操作顺序一致。
     // 适用于需要全局一致性的场景（如错误标志）。
     HAD_ERROR.store(true, std::sync::atomic::Ordering::SeqCst);
+}
+
+
+#[cfg(test)]
+mod tests { 
+
+    use super::*;
+    #[test]
+    fn test_run() {
+        let code = "(a==1)";
+        run(code.to_string());
+    }
+
 }
